@@ -35,6 +35,7 @@ public class Proceso extends Thread{
     }
 
     private void reciboMensaje(String message){
+        tim++;
         if(this.env.equals("true") && this.rec.equals("true")){
             String prot ="El proceso %d recupero el siguiente mensaje: %s y le agrega %d A A al mensaje";
             System.out.println(String.format(prot,this.id,message));
@@ -56,12 +57,11 @@ public class Proceso extends Thread{
 
     @Override
     public void run(){
-        while(!this.bufEnv.hasMessages()){
+        while(!this.bufEnv.isFull()){
             for(int i = 0; i<this.tim; i++){
                 try {
                     this.envioMensaje(i);
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
