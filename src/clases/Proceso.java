@@ -44,25 +44,25 @@ public class Proceso extends Thread{
         tim++;
         if(this.env.equals("true") && this.rec.equals("true")){
             String prot ="El proceso %d recupero el siguiente mensaje: %s y le agrega %d A A al mensaje";
-            String fin =String.format(prot,this.id,message);
+            String fin =String.format(prot,this.id,message,this.id);
             System.out.println(fin);
             mensajesP1.add(fin);
         }
         else if(this.env.equals("true") && this.rec.equals("false")){
             String prot ="El proceso %d recupero el siguiente mensaje: %s y le agrega %d A S al mensaje";
-            String fin =String.format(prot,this.id,message);
+            String fin =String.format(prot,this.id,message,this.id);
             System.out.println(fin);
             mensajesP1.add(fin);
         }
         else if(this.env.equals("false") && this.rec.equals("true")){
             String prot ="El proceso %d recupero el siguiente mensaje: %s y le agrega %d S A al mensaje";
-            String fin =String.format(prot,this.id,message);
+            String fin =String.format(prot,this.id,message,this.id);
             System.out.println(fin);
             mensajesP1.add(fin);
         }
         else if(this.env.equals("false") && this.rec.equals("false")){
             String prot ="El proceso %d recupero el siguiente mensaje: %s y le agrega %d S S al mensaje";
-            String fin =String.format(prot,this.id,message);
+            String fin =String.format(prot,this.id,message,this.id);
             System.out.println(fin);
             mensajesP1.add(fin);
         }
@@ -74,7 +74,7 @@ public class Proceso extends Thread{
     @Override
     public void run(){
         String fin = "";
-        while(!this.bufEnv.isFull() && !fin.equals("FIN")){
+        while(!this.bufEnv.isFull()|| this.bufRec.hasMessages() || !fin.equals("FIN")){
             for(int i = 0; i<this.tim; i++){
                 try {
                     this.envioMensaje(i);
@@ -82,13 +82,6 @@ public class Proceso extends Thread{
                     e.printStackTrace();
                 }
             }
-            if(this.id == 1){
-                System.out.println("los mensajes fueron:"+mensajesP1);
-                System.out.println("FIN");
-                fin = "FIN";
-            }
-        }
-        while(this.bufRec.hasMessages() && !fin.equals("FIN")){
             if(this.rec.equals("true")){
                 String message = this.bufRec.retrieveMessageActive();
                 if (message == null){
@@ -103,7 +96,13 @@ public class Proceso extends Thread{
                 }
                 this.reciboMensaje(message);
             }
+            if(this.id == 1){
+                System.out.println("los mensajes fueron:"+mensajesP1);
+                System.out.println("FIN");
+                fin = "FIN";
+            }
         }
+        System.out.println("Fin del programa");
     }
 }
 
