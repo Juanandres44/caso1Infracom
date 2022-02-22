@@ -28,22 +28,20 @@ public class Buffer {
     public synchronized void insertMessagePasive(String message){
         while(isFull()){
             try{
-                    wait();
+                wait();
             }catch (InterruptedException e){
                 e.printStackTrace();
             }
         }
         this.buffer.add(message);
-
         notify();
     }
 
     public synchronized void insertMessageActive(String message){
         while(isFull()){
-            
         }
-        this.buffer.add(message);
 
+        this.buffer.add(message);
     }
 
     public synchronized String retrieveMessagePasive(){
@@ -75,7 +73,5 @@ public class Buffer {
             pendingMsg--;
         }
         return msg;
-    }
-
-    
+    }    
 }
