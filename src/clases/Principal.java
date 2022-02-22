@@ -2,6 +2,7 @@ package clases;
 public class Principal{
 
     
+    
     public static void main(String[] args){
         Buffer bufferA = new Buffer(5,15);
         Buffer bufferB = new Buffer(4,15);
