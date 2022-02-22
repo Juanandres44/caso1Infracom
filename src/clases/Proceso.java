@@ -1,3 +1,4 @@
+package clases;
 import java.util.ArrayList;
 
 public class Proceso extends Thread{
