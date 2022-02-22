@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 
 public class Buffer {
+
     
     private List<String> buffer;
 
@@ -40,9 +41,15 @@ public class Buffer {
 
     public synchronized void insertMessageActive(String message){
         while(isFull()){
+        	try{
+                wait();
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
         }
 
         this.buffer.add(message);
+        notify();
     }
 
     public synchronized String retrieveMessagePasive(){
@@ -65,13 +72,18 @@ public class Buffer {
 
     public synchronized String retrieveMessageActive(){
         while(this.buffer.size()==0 && pendingMsg>0){
+        	try{
+                wait();
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
         }
 
         String msg = null;
         if(pendingMsg>0){
             msg = this.buffer.remove(0);
-            notify();
             pendingMsg--;
+            notify();
         }
         return msg;
     }    

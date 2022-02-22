@@ -28,15 +28,21 @@ public class Proceso extends Thread{
             Thread.sleep(vel);
             this.bufEnv.insertMessageActive(
                 "El thread productor: "+this.id+"envia de forma activa el mensaje"
-                +i+" de:"+ this.tim + "mensajes"
+                +i+" de:"+ this.tim + " mensajes"
+                );
+            System.out.println("El thread productor: " + this.id + " envia de forma activa el mensaje "
+                + i +" de: "+ this.tim + " mensajes"
                 );
         }
         else if(this.env.equals("false")){
             Thread.sleep(vel);
             this.bufEnv.insertMessagePasive(
                 "El thread productor: "+this.id+"envia de forma pasiva el mensaje"
-                +i+" de:"+ this.tim + "mensajes"
+                +i+" de:"+ this.tim + " mensajes"
                 );
+            System.out.println("El thread productor: " + this.id + " envia de forma pasiva el mensaje "
+                    + i +" de: "+ this.tim + " mensajes"
+                    );
         }
     }
 
@@ -74,14 +80,14 @@ public class Proceso extends Thread{
     @Override
     public void run(){
         String fin = "";
-        while(!this.bufEnv.isFull()|| this.bufRec.hasMessages() || !fin.equals("FIN")){
+        while(!this.bufEnv.isFull()|| !fin.equals("FIN")||this.bufRec.hasMessages()){
             for(int i = 0; i<this.tim; i++){
                 try {
                     this.envioMensaje(i);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }
+            } 
             if(this.rec.equals("true")){
                 String message = this.bufRec.retrieveMessageActive();
                 if (message == null){
